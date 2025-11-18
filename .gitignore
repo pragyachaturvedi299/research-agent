@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.env
+.env.local
+*.log
+
+# Virtual environment
+venv/
+.venv/
+research-agent/
+env/
+
+# Output files
+
+outputs/
+reports/
+
+# MacOS files
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
