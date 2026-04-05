@@ -13,6 +13,7 @@ share/
 .venv/
 research-agent/
 env/
+model/
 *.cfg
 # Output files
 

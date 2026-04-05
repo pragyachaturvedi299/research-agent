@@ -1,4 +1,5 @@
-from utils import client, load_config
+from utils import client, generator, load_config
+from duckduckgo_search import DDGS
 
 config = load_config()
 model = config["llm"]["model"]
@@ -8,7 +9,7 @@ def run_search(query):
     if provider == "none":
         return "Search disabled."
 
-    if provider == "openai":
+    if client and provider == "openai":
         response = client.responses.create(
         model=model,
         input=f"""
@@ -19,5 +20,12 @@ def run_search(query):
               # Force tool to run
     )
         return response.output_text
+    else:
+        # Use DuckDuckGo search
+        with DDGS() as ddgs:
+            results = list(ddgs.text(query, max_results=5))
+            # Format as simple text results
+            formatted_results = "\n".join([f"Title: {r['title']}\nBody: {r['body']}\nURL: {r['href']}\n" for r in results])
+            return formatted_results
 
     raise ValueError(f"Unknown search provider: {provider}")

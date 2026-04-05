@@ -12,6 +12,10 @@ langgraph
 # OpenAI API client
 openai>=1.3.0
 
+# Local model inference
+transformers
+torch
+
 # Search Tools
 duckduckgo-search     # Only needed if you keep DDG
 # If replacing with OpenAI Search: this line can remain or be removed

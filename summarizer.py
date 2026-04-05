@@ -1,4 +1,4 @@
-from utils import client, load_config
+from utils import client, generator, load_config
 
 
 config = load_config()
@@ -19,9 +19,21 @@ Search Results:
 Produce a clear, concise expert-level answer.
 """
 
-    resp = client.responses.create(
-        model=model,
-        input=prompt
-    )
-
-    return resp.output_text
+    if client:
+        resp = client.responses.create(
+            model=model,
+            input=prompt
+        )
+        return resp.output_text
+    else:
+        # Use local model
+        if generator:
+            # Phi-2 is a conversational model, so format as instruction
+            formatted_prompt = f"Instruct: {prompt}\nOutput:"
+            outputs = generator(formatted_prompt, max_new_tokens=1024, do_sample=True, temperature=0.2, pad_token_id=generator.tokenizer.eos_token_id)
+            generated_text = outputs[0]['generated_text']
+            # Extract the response after the prompt
+            response = generated_text[len(formatted_prompt):].strip()
+            return response
+        else:
+            return "No model available for summarization."
